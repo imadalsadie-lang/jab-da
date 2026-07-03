@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مركز جمعة الماجد - تسجيل الأعمال اليومية</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-blue: #1a2634;
+            --accent-gold: #d4af37;
+            --bg-academic: #fdfaf5;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Amiri', serif;
+            background-color: var(--bg-academic);
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            margin: 0;
+            display: flex;
+            color: #333;
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary-blue);
+            color: white;
+            min-height: 100vh;
+            position: fixed;
+            right: 0;
+            top: 0;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 20px 0;
+            margin: 0;
+        }
+
+        .sidebar nav ul li {
+            padding: 15px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1em;
+            transition: 0.3s;
+        }
+
+        .sidebar nav ul li:hover,
+        .sidebar nav ul li.active {
+            background-color: #2c3e50;
+            border-right: 5px solid var(--accent-gold);
+        }
+
+        .main-content {
+            margin-right: 280px;
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 10px 0;
+            border-bottom: 2px solid #eee;
+        }
+
+        .center-title h1 {
+            margin: 0;
+            color: var(--primary-blue);
+            font-size: 28px;
+        }
+
+        .center-title p {
+            margin: 5px 0;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            border-top: 4px solid var(--primary-blue);
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            color: #777;
+            font-size: 16px;
+        }
+
+        .stat-card p {
+            margin: 10px 0;
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .workspace-layout {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .primary-workspace {
+            flex: 2;
+            min-width: 0;
+        }
+
+        .side-excel-panel {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 4px solid #28a745;
+            display: none;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .table-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .admin-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            align-items: center;
+        }
+
+        #freeSearch {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: 'Amiri';
+            min-width: 250px;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Amiri';
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add { background: var(--primary-blue); color: white; }
+        .btn-excel { background: #1d6f42; color: white; }
+        .btn-share { background: #555; color: white; }
+        .btn-teams { background: #464eb8; color: white; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background: #f4f7f6;
+            padding: 15px;
+            text-align: right;
+            color: var(--primary-blue);
+            border-bottom: 2px solid #ddd;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        td input {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Amiri';
+            box-sizing: border-box;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .details-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .details-box h4 {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .doc-editor-container {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .doc-textarea {
+            width: 100%;
+            height: 140px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: 'Amiri', serif;
+            font-size: 1.05em;
+            resize: vertical;
+            box-sizing: border-box;
+            background: #fff;
+            color: #333;
+        }
+
+        .doc-textarea:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 5px rgba(212,175,55,0.3);
+        }
+
+        .btn-doc-download {
+            background: #2b579a;
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.9em;
+            border-radius: 4px;
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Amiri';
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-doc-download:hover {
+            background: #1e3d6b;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        h1, h2, h3, h4, .btn {
+            font-family: 'Amiri', serif;
+        }
+
+        #excelUpload {
+            display: none;
+        }
+
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .password-wrapper input {
+            width: 100%;
+            padding: 10px 40px 10px 10px;
+            box-sizing: border-box;
+        }
+
+        .password-toggle-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #777;
+            z-index: 10;
+        }
+
+        .imported-file-card {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 1100px) {
+            .workspace-layout {
+                flex-direction: column;
+            }
+
+            .details-grid,
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+            }
+
+            .main-content {
+                margin-right: 0;
+            }
+
+            body {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="screenLoginBlock" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#fdfaf5; display:flex; justify-content:center; align-items:center; z-index:9999;">
+        <div style="background:white; padding:30px; border-radius:15px; width:350px; box-shadow:0 0 15px rgba(0,0,0,.2); text-align:center;">
+            <h2>تسجيل الدخول</h2>
+            <input id="inputUserEmail" type="email" placeholder="البريد الإلكتروني" value="riad@example.com" style="width:100%;padding:10px;margin:10px 0; box-sizing: border-box;">
+            
+            <div class="password-wrapper">
+                <input id="inputUserPassword" type="password" placeholder="كلمة المرور" value="123456">
+                <i class="fas fa-eye password-toggle-icon" onclick="togglePasswordVisibility('inputUserPassword', this)"></i>
+            </div>
+
+            <button id="btnSubmitLogin" onclick="executeSystemLogin()" style="background:#1a2634; color:white; padding:10px 20px; border:none; border-radius:8px; cursor:pointer; width: 100%; font-family:'Amiri'; font-size:1.1em; margin-top: 10px;">دخول</button>
+            <li id="menuSystemUsers" style="list-style: none; margin-top: 15px; cursor: pointer; color: #1a2634; font-weight: bold;">
+                <i class="fas fa-users"></i> إدارة المستخدمين
+            </li>
+        </div>
+    </div>
+
+    <div id="panelSystemUsers" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:20px; width:500px; max-width: 90%; border-radius:15px; box-shadow:0 0 20px rgba(0,0,0,.2); z-index:9999; box-sizing: border-box;">
+        <h2>إدارة المستخدمين</h2>
+        <input id="txtNewUserName" placeholder="اسم الموظف" style="width:100%;padding:10px;margin:5px 0;box-sizing: border-box;">
+        <input id="txtNewUserEmail" type="email" placeholder="البريد الإلكتروني" style="width:100%;padding:10px;margin:5px 0;box-sizing: border-box;">
+        
+        <div class="password-wrapper" style="margin: 5px 0;">
+            <input id="txtNewUserPass" type="password" placeholder="كلمة المرور">
+            <i class="fas fa-eye password-toggle-icon" onclick="togglePasswordVisibility('txtNewUserPass', this)"></i>
+        </div>
+
+        <select id="selectNewUserRole" style="width:100%;padding:10px;margin:5px 0;box-sizing: border-box; font-family:'Amiri';">
+            <option>موظف</option>
+            <option>مشرف</option>
+            <option>مدير</option>
+        </select>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <button onclick="addNewUser()" class="btn btn-add">إضافة المستخدم</button>
+            <button onclick="closeUsersPanel()" class="btn btn-share">إغلاق</button>
+        </div>
+        <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
+        <div id="containerUsersList" style="max-height: 200px; overflow-y: auto;"></div>
+    </div>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2 style="margin:0; color:var(--accent-gold);">DocuVise</h2>
+            <small>نظام إدارة المحتوى الثقافي</small>
+        </div>
+        <nav>
+            <ul>
+                <li class="menu-item"><i class="fas fa-chart-line"></i> لوحة التحكم</li>
+                <li class="menu-item active"><i class="fas fa-folder-open"></i> تسجيل الأعمال اليومية</li>
+                <li class="menu-item"><i class="fas fa-users-cog"></i> المهام والمتابعة (مدير)</li>
+                <li class="menu-item"><i class="fas fa-file-alt"></i> تقارير الإنجاز</li>
+                <li class="menu-item"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</li>
+            </ul>
+        </nav>
+    </aside>
+ 
+    <main class="main-content">
+        <header>
+            <div class="center-title">
+                <h1>مركز جمعة الماجد للثقافة والتراث</h1>
+                <p>قسم المعالجة الفنية - نظام توثيق الأعمال</p>
+            </div>
+            <div style="text-align: left;">
+                <strong id="currentUserDisplay">المستخدم: ضيف</strong><br>
+                <small id="currentUserRole">موظف</small>
+            </div>
+        </header>
+ 
+        <div class="stats-container">
+            <div class="stat-card"><h3>إجمالي السجلات</h3><p id="totalTasks">2</p></div>
+            <div class="stat-card"><h3>العناوين المسجلة</h3><p id="completedTasks">2</p></div>
+            <div class="stat-card" style="border-top-color: #dc3545;"><h3>المعوقات</h3><p>0</p></div>
+            <div class="stat-card" style="border-top-color: #ffc107;"><h3>ساعات العمل</h3><p>7.00</p></div>
+        </div>
+ 
+        <div class="workspace-layout">
+            <div class="primary-workspace">
+                <div class="table-section">
+                    <div style="margin-bottom: 15px; font-size: 1.2em; color: var(--primary-blue); font-weight: bold;">
+                        <i class="fas fa-file-excel" style="color: #1d6f42;"></i> ملف أعمال المفهرس: <span id="indexerNameHeader" style="color: var(--accent-gold);">ريـاض ديـاب</span>
+                    </div>
+                    
+                    <div class="admin-toolbar">
+                        <button class="btn btn-add" id="addTableRowBtn"><i class="fas fa-plus"></i> إضافة سطر جديد</button>
+                        <button class="btn btn-excel" id="exportExcelBtn"><i class="fas fa-file-download"></i> تصدير Excel (زر واحد)</button>
+                        <button class="btn btn-share" id="shareEmailBtn"><i class="fas fa-envelope"></i> إرسال بالبريد</button>
+                        <button class="btn btn-teams" id="shareTeamsBtn"><i class="fab fa-microsoft"></i> إرسال عبر Teams</button>
+                        
+                        <input type="file" id="excelUpload" accept=".xls,.xlsx,.csv,.html">
+                        <button class="btn btn-add" id="importExcelBtn" onclick="document.getElementById('excelUpload').click();" style="background: #28a745;"><i class="fas fa-file-upload"></i> استيراد وحفظ ملف Excel</button>
+                        <button class="btn btn-share" id="blankExcelBtn" style="background: #6c757d;"><i class="fas fa-file-code"></i> نموذج فارغ</button>
+                        <input type="text" id="freeSearch" placeholder="بحث حر...">
+                    </div>
+
+                    <div id="managerTasksPanel" style="display:none; background:#f1f1f1; padding:15px; border-radius:8px; margin-bottom:15px;">
+                        <h3>لوحة مراقبة مهام الموظفين (إدارة)</h3>
+                        <div id="managerTasksContainer"></div>
+                    </div>
+
+                    <table id="businessTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%">#</th>
+                                <th style="width: 20%">التاريخ</th>
+                                <th style="width: 35%">العنوان</th>
+                                <th style="width: 15%">النسخة</th>
+                                <th style="width: 25%">الملاحظات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><input type="date" value="2026-07-01"></td>
+                                <td><input type="text" value="فهرسة كتاب المخطوطات العربية القيمة"></td>
+                                <td><input type="text" value="النسخة الأولى"></td>
+                                <td><input type="text" value="تمت الفهرسة بالكامل"></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><input type="date" value="2026-07-02"></td>
+                                <td><input type="text" value="ديوان العرب - دراسة وتحقيق"></td>
+                                <td><input type="text" value="طبعة دار المعارف"></td>
+                                <td><input type="text" value="بحاجة لمراجعة الاستنادات"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="side-excel-panel" id="importedExcelSidePanel">
+                <div style="margin-bottom: 15px; font-size: 1.1em; color: #28a745; font-weight: bold; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #28a745; padding-bottom: 8px;">
+                    <span><i class="fas fa-box-open"></i> صندوق حفظ ملفات الـ Excel</span>
+                    <button onclick="document.getElementById('importedExcelSidePanel').style.display='none';" style="background:none; border:none; color:#dc3545; cursor:pointer; font-size: 1.2em;"><i class="fas fa-times-circle"></i></button>
+                </div>
+                <div style="font-size: 0.9em; color: #666; margin-bottom: 12px;">أرشيف الملفات المستوردة والمحفوظة في النظام:</div>
+                <div id="importedFilesContainer"></div>
+            </div>
+        </div>
+ 
+        <div class="details-grid">
+            <div class="details-box">
+                <h4 style="color: #d4af37;"><i class="fas fa-medal"></i> أبرز الإنجازات</h4>
+                <ul>
+                    <li>حفظ مستند الـ Excel بالكامل داخل الصندوق لحمايته من أي مشكلة ترميز.</li>
+                    <li>إمكانية التعديل والكتابة المباشرة داخل الخلايا الحالية.</li>
+                </ul>
+            </div>
+            <div class="details-box">
+                <h4 style="color: #dc3545;"><i class="fas fa-exclamation-circle"></i> المعوقات</h4>
+                <ul>
+                    <li>لا يوجد معوقات حالية للنظام.</li>
+                </ul>
+            </div>
+            <div class="details-box">
+                <h4 style="color: #007bff;"><i class="fas fa-calendar-check"></i> خطة الغد</h4>
+                <div class="doc-editor-container">
+                    <textarea id="txtTomorrowPlanDoc" class="doc-textarea" placeholder="اكتب مهام وأهداف الغد هنا بحرية..."></textarea>
+                    <button class="btn-doc-download" onclick="downloadAsGoogleDoc()">
+                        <i class="fas fa-file-word"></i> تحميل مستند الخطة (Google Doc)
+                    </button>
+                </div>
+            </div>
+        </div>
+ 
+        <footer id="brandNewFooterContainer2026">
+            <p>جميع الحقوق محفوظة لـ <strong>عماد كاظم السعدي</strong> &copy; 2026</p>
+            <p>مركز ثقافي عالمي - دبي، الإمارات العربية المتحدة</p>
+        </footer>
+    </main>
+
+    <script>
+        let currentUserName = "رياض دياب";
+
+        const systemUsers = [
+            { name: "مدير النظام", email: "demo", password: "22445", role: "مدير النظام" },
+            { name: "عماد كاظم السعدي", email: "imad@example.com", password: "123456", role: "مدير النظام" },
+            { name: "رياض دياب", email: "riad@example.com", password: "123456", role: "موظف / مفهرس" }
+        ];
+
+        let appUsers = JSON.parse(localStorage.getItem("appUsers")) || [
+            { name: "عماد كاظم السعدي", email: "imad@example.com", password: "123456", role: "مدير" }
+        ];
+
+        function togglePasswordVisibility(inputId, icon) {
+            const inputField = document.getElementById(inputId);
+            if (inputField.type === "password") {
+                inputField.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                inputField.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+
+        function changePassword(email, newPassword){
+            let userIndex = appUsers.findIndex(u => u.email === email);
+            if(userIndex !== -1){
+                appUsers[userIndex].password = newPassword;
+                saveUsers();
+                alert('تم تغيير كلمة المرور بنجاح في النظام الحالي.');
+                renderUsersList();
+                return;
+            }
+
+            let systemIndex = systemUsers.findIndex(u => u.email === email);
+            if(systemIndex !== -1) {
+                systemUsers[systemIndex].password = newPassword;
+                alert('تم تحديث كلمة مرور حساب النظام للجلسة الحالية.');
+                renderUsersList();
+                return;
+            }
+            alert('المستخدم غير موجود!');
+        }
+
+        function promptEditPassword(email) {
+            const allUsers = [...systemUsers, ...appUsers];
+            const foundUser = allUsers.find(u => u.email === email);
+            if(foundUser) {
+                let newPass = prompt(`أدخل كلمة المرور الجديدة للمستخدم (${foundUser.name}):`, foundUser.password);
+                if (newPass !== null && newPass.trim() !== "") {
+                    changePassword(email, newPass.trim());
+                }
+            }
+        }
+
+        function saveUsers(){ 
+            localStorage.setItem("appUsers", JSON.stringify(appUsers)); 
+        }
+
+        function showUsersPanel(){ 
+            document.getElementById("panelSystemUsers").style.display="block"; 
+            renderUsersList(); 
+        }
+
+        function closeUsersPanel(){ 
+            document.getElementById("panelSystemUsers").style.display="none"; 
+        }
+
+        function addNewUser(){
+            const name = document.getElementById("txtNewUserName").value.trim();
+            const email = document.getElementById("txtNewUserEmail").value.trim();
+            const password = document.getElementById("txtNewUserPass").value.trim();
+            const role = document.getElementById("selectNewUserRole").value;
+
+            if(!name || !email || !password){ 
+                alert("أكمل جميع الحقول"); 
+                return; 
+            }
+
+            appUsers.push({ name, email, password, role });
+            saveUsers();
+            renderUsersList();
+            alert("تمت إضافة المستخدم");
+            document.getElementById("txtNewUserName").value = "";
+            document.getElementById("txtNewUserEmail").value = "";
+            document.getElementById("txtNewUserPass").value = "";
+        }
+
+        function deleteUser(email){
+            appUsers = appUsers.filter(u => u.email !== email);
+            saveUsers();
+            renderUsersList();
+        }
+
+        function renderUsersList(){
+            let html = "";
+            const allUsers = [...systemUsers, ...appUsers];
+            const uniqueUsers = allUsers.filter((value, index, self) =>
+                index === self.findIndex((t) => t.email === value.email)
+            );
+
+            uniqueUsers.forEach(user => {
+                html += `
+                <div style="padding:10px; border:1px solid #ddd; margin-bottom:5px; border-radius:8px; overflow:hidden; background:#fafafa;">
+                    <div style="float:left; display:flex; gap:5px;">
+                        <button onclick="promptEditPassword('${user.email}')" style="background:#ffc107; color:#222; border:none; padding:5px 10px; cursor:pointer; font-family:'Amiri'; border-radius:4px; font-weight:bold;">تعديل كلمة المرور</button>
+                        <button onclick="deleteUser('${user.email}')" style="background:red; color:white; border:none; padding:5px 10px; cursor:pointer; font-family:'Amiri'; border-radius:4px;">حذف</button>
+                    </div>
+                    <b>${user.name}</b><br><small>${user.email} - ${user.role} (كلمة المرور: ${user.password})</small>
+                </div>`;
+            });
+
+            document.getElementById("containerUsersList").innerHTML = html;
+        }
+
+        function executeSystemLogin(){
+            const email = document.getElementById("inputUserEmail").value.trim();
+            const password = document.getElementById("inputUserPassword").value.trim();
+
+            const allUsers = [...systemUsers, ...appUsers];
+            const user = allUsers.find(u => u.email === email && u.password === password);
+
+            if(user){
+                currentUserName = user.name;
+                document.getElementById("screenLoginBlock").style.display = "none";
+                document.getElementById("currentUserDisplay").textContent = "المستخدم: " + user.name;
+                document.getElementById("currentUserRole").textContent = user.role;
+                document.getElementById("indexerNameHeader").textContent = user.name;
+                forceApplyCopyrights();
+                updateStats();
+                saveCurrentTasksToManager();
+                renderImportedFilesList();
+            } else {
+                alert("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+            }
+        }
+
+        function updateStats() {
+            const rowCount = document.querySelectorAll("#businessTable tbody tr").length;
+            document.getElementById("totalTasks").textContent = rowCount;
+            document.getElementById("completedTasks").textContent = rowCount;
+        }
+
+        function forceApplyCopyrights() {
+            const targetFooter = document.getElementById("brandNewFooterContainer2026");
+            if(targetFooter) {
+                targetFooter.innerHTML = `<p>جميع الحقوق محفوظة لـ <strong>عماد كاظم السعدي</strong> &copy; 2026</p><p>مركز ثقافي عالمي - دبي، الإمارات العربية المتحدة</p>`;
+            }
+        }
+
+        function generateReportText(){
+            let report = `تقرير الأعمال اليومية - المفهرس: ${currentUserName}\n\n`;
+            document.querySelectorAll("#businessTable tbody tr").forEach((row, index) => {
+                const inputs = row.querySelectorAll("input");
+                if (inputs[1] && inputs[1].value.trim() !== "") {
+                    report += `${index + 1} - التاريخ: ${inputs[0].value} | العنوان: ${inputs[1].value} | النسخة: ${inputs[2].value} | الملاحظات: ${inputs[3].value}\n`;
+                }
+            });
+            return report;
+        }
+
+        function saveCurrentTasksToManager() {
+            let allEmployeeTasks = JSON.parse(localStorage.getItem('allEmployeeTasks')) || [];
+            allEmployeeTasks.push({
+                employee: currentUserName,
+                date: new Date().toLocaleString('ar-EG'),
+                rows: document.querySelector('#businessTable tbody').innerHTML
+            });
+            localStorage.setItem('allEmployeeTasks', JSON.stringify(allEmployeeTasks));
+        }
+
+        function loadManagerTasks(){
+            const data = JSON.parse(localStorage.getItem('allEmployeeTasks')) || [];
+            let html = '';
+            data.forEach(item => {
+                html += `
+                <div style="border:1px solid #ddd; padding:10px; margin:10px 0; background:#fff; border-radius:6px;">
+                    <b>الموظف: ${item.employee}</b> | <small>تاريخ الرفع: ${item.date}</small>
+                </div>`;
+            });
+            document.getElementById('managerTasksContainer').innerHTML = html || "لا يوجد مهام مرفوعة حالياً.";
+        }
+
+        function renderImportedFilesList() {
+            const container = document.getElementById("importedFilesContainer");
+            const savedFiles = JSON.parse(localStorage.getItem("savedExcelFiles")) || [];
+
+            if(savedFiles.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:#888; padding:20px;">لا توجد ملفات محفوظة حالياً.</div>`;
+                return;
+            }
+
+            let html = "";
+            savedFiles.forEach((f, idx) => {
+                html += `
+                <div class="imported-file-card">
+                    <div style="font-weight: bold; color: var(--primary-blue); word-break: break-all;">
+                        <i class="fas fa-file-excel" style="color:#1d6f42; margin-left:5px;"></i> ${f.fileName}
+                    </div>
+                    <div style="font-size: 0.85em; color: #666; margin: 5px 0;">
+                        <i class="fas fa-clock"></i> <strong>تاريخ الاستيراد:</strong> ${f.importDate}
+                    </div>
+                    <div style="display:flex; gap:8px; margin-top:8px;">
+                        <button onclick="downloadSavedFile(${idx})" class="btn" style="background:#28a745; color:white; padding:4px 10px; font-size:0.85em;">
+                            <i class="fas fa-download"></i> تحميل الملف الأصلي
+                        </button>
+                        <button onclick="deleteSavedFile(${idx})" class="btn" style="background:#dc3545; color:white; padding:4px 10px; font-size:0.85em;">
+                            <i class="fas fa-trash-alt"></i> حذف
+                        </button>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function downloadSavedFile(idx) {
+            const savedFiles = JSON.parse(localStorage.getItem("savedExcelFiles")) || [];
+            const fileData = savedFiles[idx];
+            if(!fileData) return;
+            const blob = new Blob([fileData.content], { type: "application/vnd.ms-excel;charset=utf-8;" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = fileData.fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function deleteSavedFile(idx) {
+            if(confirm("هل أنت متأكد من حذف هذا الملف من الصندوق الجانبي؟")) {
+                let savedFiles = JSON.parse(localStorage.getItem("savedExcelFiles")) || [];
+                savedFiles.splice(idx, 1);
+                localStorage.setItem("savedExcelFiles", JSON.stringify(savedFiles));
+                renderImportedFilesList();
+            }
+        }
+
+        function downloadAsGoogleDoc() {
+            const planText = document.getElementById("txtTomorrowPlanDoc").value;
+            if(!planText.trim()) {
+                alert("الرجاء كتابة خطة الغد داخل المربع قبل محاولة حفظ وتحميل المستند!");
+                return;
+            }
+
+            const safePlanText = planText
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\n/g, "<br>");
+
+            const docContent = `
+            <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+            <head>
+                <meta charset='UTF-8'>
+                <title>خطة الغد</title>
+                <style>
+                    body {
+                        font-family: 'Arial', 'Amiri', serif;
+                        direction: rtl;
+                        text-align: right;
+                        padding: 20px;
+                    }
+                    h2 {
+                        color: #1a2634;
+                        border-bottom: 2px solid #d4af37;
+                        padding-bottom: 5px;
+                    }
+                    p {
+                        font-size: 12pt;
+                        line-height: 1.6;
+                        white-space: pre-wrap;
+                    }
+                </style>
+            </head>
+            <body>
+                <h2>خطة العمل للغد - الموظف: ${currentUserName}</h2>
+                <p>${safePlanText}</p>
+            </body>
+            </html>`;
+
+            const blob = new Blob([docContent], { type: 'application/msword;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `خطة_الغد_${currentUserName.replace(/\s+/g, '_')}.doc`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function buildExcelHtml(title, rowsHtml) {
+            return `
+            <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+            <head>
+                <meta charset="UTF-8">
+                <!--[if gte mso 9]>
+                <xml>
+                    <x:ExcelWorkbook>
+                        <x:ExcelWorksheets>
+                            <x:ExcelWorksheet>
+                                <x:Name>${title}</x:Name>
+                                <x:WorksheetOptions>
+                                    <x:DisplayRightToLeft/>
+                                </x:WorksheetOptions>
+                            </x:ExcelWorksheet>
+                        </x:ExcelWorksheets>
+                    </x:ExcelWorkbook>
+                </xml>
+                <![endif]-->
+            </head>
+            <body>
+                <table border="1">
+                    <tr>
+                        <td colspan="4" style="font-weight:bold; font-size:14px; text-align:center;">ملف أعمال المفهرس: ${currentUserName}</td>
+                    </tr>
+                    <tr style="background-color:#f4f7f6; font-weight:bold;">
+                        <td>التاريخ</td>
+                        <td>العنوان</td>
+                        <td>النسخة</td>
+                        <td>الملاحظات</td>
+                    </tr>
+                    ${rowsHtml}
+                </table>
+            </body>
+            </html>`;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("txtTomorrowPlanDoc").value = "استكمال الفهرسة الميكروفيلمية المتبقية.";
+
+            forceApplyCopyrights();
+            renderImportedFilesList();
+            updateStats();
+
+            const triggerLoginOnEnter = (event) => {
+                if (event.key === "Enter" || event.keyCode === 13) {
+                    event.preventDefault();
+                    executeSystemLogin();
+                }
+            };
+
+            document.getElementById("inputUserEmail").addEventListener("keydown", triggerLoginOnEnter);
+            document.getElementById("inputUserPassword").addEventListener("keydown", triggerLoginOnEnter);
+
+            const tbody = document.querySelector("#businessTable tbody");
+
+            document.getElementById("addTableRowBtn").addEventListener("click", function () {
+                const rowCount = tbody.rows.length + 1;
+                const row = document.createElement("tr");
+                const today = new Date().toISOString().split('T')[0];
+
+                row.innerHTML = `
+                    <td>${rowCount}</td>
+                    <td><input type="date" value="${today}"></td>
+                    <td><input type="text" placeholder="أدخل العنوان..."></td>
+                    <td><input type="text" placeholder="النسخة..."></td>
+                    <td><input type="text" placeholder="ملاحظات..."></td>
+                `;
+                tbody.appendChild(row);
+                updateStats();
+            });
+
+            document.getElementById("exportExcelBtn").addEventListener("click", function () {
+                let rowsHtml = "";
+                document.querySelectorAll("#businessTable tbody tr").forEach(row => {
+                    const inputs = row.querySelectorAll("input");
+                    const dateVal = inputs[0] ? inputs[0].value : "";
+                    const titleVal = inputs[1] ? inputs[1].value : "";
+                    const versionVal = inputs[2] ? inputs[2].value : "";
+                    const noteVal = inputs[3] ? inputs[3].value : "";
+                    rowsHtml += `
+                        <tr>
+                            <td>${dateVal}</td>
+                            <td>${titleVal}</td>
+                            <td>${versionVal}</td>
+                            <td>${noteVal}</td>
+                        </tr>`;
+                });
+
+                const htmlTemplate = buildExcelHtml("تقرير الإنجاز", rowsHtml);
+                const blob = new Blob([htmlTemplate], { type: "application/vnd.ms-excel;charset=utf-8;" });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = `أعمال_المفهرس_${currentUserName.replace(/\s+/g, '_')}.xls`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            document.getElementById('blankExcelBtn').addEventListener('click', () => {
+                const htmlTemplate = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta charset="UTF-8">
+                    <!--[if gte mso 9]>
+                    <xml>
+                        <x:ExcelWorkbook>
+                            <x:ExcelWorksheets>
+                                <x:ExcelWorksheet>
+                                    <x:Name>نموذج فارغ</x:Name>
+                                    <x:WorksheetOptions>
+                                        <x:DisplayRightToLeft/>
+                                    </x:WorksheetOptions>
+                                </x:ExcelWorksheet>
+                            </x:ExcelWorksheets>
+                        </x:ExcelWorkbook>
+                    </xml>
+                    <![endif]-->
+                </head>
+                <body>
+                    <table border="1">
+                        <tr style="background-color:#f4f7f6; font-weight:bold;">
+                            <td>التاريخ</td><td>العنوان</td><td>النسخة</td><td>الملاحظات</td>
+                        </tr>
+                    </table>
+                </body>
+                </html>`;
+                const blob = new Blob([htmlTemplate], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'Daily_Work_Template.xls';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            document.getElementById('shareEmailBtn').addEventListener('click', () => {
+                document.getElementById("exportExcelBtn").click();
+                setTimeout(() => {
+                    const bodyText = encodeURIComponent(generateReportText());
+                    window.open(`mailto:?subject=تقرير الأعمال اليومية - ${currentUserName}&body=${bodyText}`, "_blank");
+                }, 1000);
+            });
+
+            document.getElementById("shareTeamsBtn").addEventListener("click", function () {
+                document.getElementById("exportExcelBtn").click();
+                const reportSummary = generateReportText();
+
+                navigator.clipboard.writeText(reportSummary).then(() => {
+                    alert("تم نسخ بيانات التقرير وجاري تنزيل ملف Excel! سيتم تحويلك الآن إلى Microsoft Teams.");
+                    window.open("https://teams.microsoft.com", "_blank");
+                }).catch(() => {
+                    window.open("https://teams.microsoft.com", "_blank");
+                });
+            });
+
+            document.getElementById("excelUpload").addEventListener("change", function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const fileContent = evt.target.result;
+                    const now = new Date();
+
+                    const formattedDate = now.toLocaleDateString('ar-EG', {
+                        year: 'numeric', month: 'long', day: 'numeric'
+                    }) + " - " + now.toLocaleTimeString('ar-EG', {
+                        hour: '2-digit', minute: '2-digit', second: '2-digit'
+                    });
+
+                    let savedFiles = JSON.parse(localStorage.getItem("savedExcelFiles")) || [];
+                    savedFiles.push({
+                        fileName: file.name,
+                        importDate: formattedDate,
+                        content: fileContent
+                    });
+
+                    localStorage.setItem("savedExcelFiles", JSON.stringify(savedFiles));
+                    document.getElementById("importedExcelSidePanel").style.display = "block";
+                    renderImportedFilesList();
+
+                    alert("تم حفظ مستند الـ Excel بالكامل بنظام الأرشفة الجانبي مع تثبيت تاريخ وساعة الاستيراد بنجاح.");
+                };
+
+                reader.readAsText(file, "UTF-8");
+                e.target.value = "";
+            });
+
+            document.getElementById("menuSystemUsers").addEventListener("click", showUsersPanel);
+
+            const menuItems = document.querySelectorAll(".sidebar ul li.menu-item");
+            menuItems.forEach(item => {
+                item.addEventListener("click", function () {
+                    menuItems.forEach(li => li.classList.remove("active"));
+                    this.classList.add("active");
+                    const text = this.textContent.trim();
+
+                    if(text.includes('لوحة التحكم')){
+                        alert('تم فتح لوحة التحكم');
+                    }
+                    if(text.includes('تسجيل الأعمال اليومية')){
+                        document.querySelector('.table-section').scrollIntoView({ behavior: 'smooth' });
+                    }
+                    if(text.includes('المهام والمتابعة')){
+                        loadManagerTasks();
+                        document.getElementById('managerTasksPanel').style.display = 'block';
+                    }
+                    if(text.includes('تقارير الإنجاز')){
+                        document.getElementById('exportExcelBtn').click();
+                    }
+                    if (text.includes("تسجيل الخروج")) {
+                        if (confirm("هل تريد تسجيل الخروج؟")) {
+                            location.reload();
+                        }
+                    }
+                });
+            });
+
+            document.getElementById("freeSearch").addEventListener("keyup", function () {
+    const value = this.value.toLowerCase();
+
+    document.querySelectorAll("#businessTable tbody tr").forEach(row => {
+        const titleInput = row.querySelectorAll("td input")[1];
+        const titleText = titleInput ? titleInput.value.toLowerCase() : "";
+        row.style.display = titleText.includes(value) ? "" : "none";
+    });
+});
+        });
+    </script>
+</body>
+</html>
